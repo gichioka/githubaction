@@ -1,24 +1,13 @@
-# 参考
-# https://docs.github.com/ja/actions/learn-github-actions/workflow-syntax-for-github-actions#about-yaml-syntax-for-workflows
-
-# Workflow名
-name: Shell Commands
-# イベントトリガー
-# Git Pushした時にこのワークフローを実行する
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
-
 jobs:
-  # job名(任意の名前で良い)
-  run-shell-commmand:
-    # virtual machineの形式を指定
+  check-bats-version:
     runs-on: ubuntu-latest
-    # jobのステップ
     steps:
-      # ステップ名
-      - name: echo a string
-        run: echo "Hello World"
-      # ステップ2
-      - name: multiline script
-        run: | # 複数のコマンドを記載したいときは|(パイプ)で繋ぐ
-          node -v
-          npm -v
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: bats -v
